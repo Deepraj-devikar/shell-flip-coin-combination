@@ -24,10 +24,11 @@ function headsOrTails () {
 	fi
 }
 
-numberOfRounds=0 declare -A singlet
+# Singlet Combination
+numberOfRounds=0
+declare -A singlet
 singlet["H"]=0
 singlet["T"]=0
-
 for (( i=0; i<10; i++ ))
 do
 	flipCoin=$(headsOrTails)
@@ -41,4 +42,20 @@ tailsPercentage=$(multiplication $tailsPercentage 100)
 echo "Percentage of heads is $headsPercentage"
 echo "Percentage of tails is $tailsPercentage"
 
-
+# Doublet Combination
+numberOfRounds=0
+declare -A doublet
+doublet["HH"]=0
+doublet["HT"]=0
+doublet["TH"]=0
+doublet["TT"]=0
+for (( i=0; i<20; i++ ))
+do
+	flipCoin="$(headsOrTails)$(headsOrTails)"
+	doublet[$flipCoin]=$((${doublet[$flipCoin]}+1))
+	numberOfRounds=$(($numberOfRounds+1))
+done
+echo "Percentage of HH is $(multiplication $(division ${doublet['HH']} $numberOfRounds) 100)"
+echo "Percentage of HT is $(multiplication $(division ${doublet['HT']} $numberOfRounds) 100)"
+echo "Percentage of TH is $(multiplication $(division ${doublet['TH']} $numberOfRounds) 100)"
+echo "Percentage of TT is $(multiplication $(division ${doublet['TT']} $numberOfRounds) 100)"
